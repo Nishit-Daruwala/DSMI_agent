@@ -18,7 +18,7 @@ This guide explains how to deploy the DSMI Agent completely for free. By utilizi
 2. Create a new project. Name it `dsmi-agent`.
 3. Once created, go to the dashboard and copy the **Postgres Connection String**.
 4. Save this as your `DATABASE_URL`. It will look like: `postgresql://user:pass@ep-rest-of-url.neon.tech/neondb`
-   > **Note:** To work with `asyncpg` in Python, you may need to change `postgresql://` to `postgresql+asyncpg://`.
+   > **Note:** Just paste the URL exactly as Neon provides it.
 
 ### 2. Redis Cache (Upstash)
 1. Go to [Upstash.com](https://upstash.com) and sign up.
