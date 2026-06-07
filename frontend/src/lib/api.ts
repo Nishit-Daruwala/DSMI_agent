@@ -2,7 +2,9 @@
  * API client wrapper for the FastAPI backend.
  */
 
-const API_BASE_URL = "http://localhost:8000/api";
+// Ensure we always hit the /api suffix
+const _baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE_URL = _baseUrl.replace(/\/$/, "") + "/api";
 
 class ApiClient {
   private getToken() {
