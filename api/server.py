@@ -217,6 +217,7 @@ def download_md(session_id: str, user: dict = Depends(get_current_user)):
 # HEALTH
 # ══════════════════════════════════════════════════════
 
+@app.head("/api/health")
 @app.get("/api/health", response_model=HealthResponse)
 def health_check():
     db_status = "ok"
