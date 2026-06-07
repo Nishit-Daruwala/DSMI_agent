@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { api } from "@/lib/api";
+import { api, API_BASE_URL } from "@/lib/api";
 import { motion } from "framer-motion";
 import { Terminal, StopCircle, CheckCircle2, Loader2, BrainCircuit, LineChart, Target, ShieldCheck, FileText } from "lucide-react";
 
@@ -42,7 +42,7 @@ export default function ResearchPage() {
     // and we need JWT auth, we must fetch the SSE stream manually.
     const startStream = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/research/start", {
+        const response = await fetch(`${API_BASE_URL}/research/start`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

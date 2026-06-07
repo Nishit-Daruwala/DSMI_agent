@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { api } from "@/lib/api";
+import { api, API_BASE_URL } from "@/lib/api";
 import { Download, Loader2, Target, BarChart2, Zap, BookOpen, FileText } from "lucide-react";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
@@ -33,7 +33,7 @@ export default function ReportPage() {
     try {
       const endpoint = `/sessions/${id}/${type}`;
       // Need a direct fetch to handle blobs
-      const res = await fetch(`http://localhost:8000/api${endpoint}`, {
+      const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("dsmi_token")}`
         }

@@ -4,7 +4,7 @@
 
 // Ensure we always hit the /api suffix
 const _baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-const API_BASE_URL = _baseUrl.replace(/\/$/, "") + "/api";
+export const API_BASE_URL = _baseUrl.replace(/\/$/, "") + "/api";
 
 class ApiClient {
   private getToken() {
