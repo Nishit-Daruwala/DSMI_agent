@@ -1,0 +1,110 @@
+# Google Cloud Run Service Configuration
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: dsmi-api
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "100"
+        autoscaling.knative.dev/minScale: "1"
+    spec:
+      serviceAccountName: dsmi-api
+      containers:
+        - image: gcr.io/PROJECT_ID/dsmi-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENV
+              value: production
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dsmi-secrets
+                  key: database-url
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dsmi-secrets
+                  key: redis-url
+            - name: QDRANT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dsmi-secrets
+                  key: qdrant-url
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dsmi-secrets
+                  key: jwt-secret
+          resources:
+            requests:
+              cpu: 1
+              memory: 512Mi
+            limits:
+              cpu: 2
+              memory: 2Gi
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health/live
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health/ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      timeoutSeconds: 300
+---
+apiVersion: cloudrun.googleapis.com/v1
+kind: Service
+metadata:
+  name: dsmi-api
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/cpu-throttling: "false"
+      labels:
+        app: dsmi-api
+    spec:
+      serviceAccountName: dsmi-api
+      containers:
+        - image: gcr.io/PROJECT_ID/dsmi-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENV
+              value: production
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dsmi-secrets
+                  key: database-url
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dsmi-secrets
+                  key: redis-url
+            - name: QDRANT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dsmi-secrets
+                  key: qdrant-url
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dsmi-secrets
+                  key: jwt-secret
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+      timeoutSeconds: 300
+  traffic:
+    - percent: 100
+      latestRevision: true

@@ -1,0 +1,32 @@
+# Lightweight Docker image for Google Cloud Run
+# Optimized for serverless execution
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install minimal dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt gunicorn
+
+# Copy application code
+COPY . .
+
+# Create non-root user
+RUN useradd -m -u 1000 dsmi && chown -R dsmi:dsmi /app
+USER dsmi
+
+# Cloud Run requires port 8080
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8080/api/v1/health')" || exit 1
+
+# Run with gunicorn (production-ready)
+CMD exec gunicorn --bind :8080 --workers 4 --timeout 0 --access-logfile - --error-logfile - api.server:app

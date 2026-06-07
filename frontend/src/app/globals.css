@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-sans);
+}
+
+:root {
+  --background: #060B14;
+  --foreground: #FFFFFF;
+  
+  --card: #131C31;
+  --card-foreground: #FFFFFF;
+  
+  --primary: #00D4FF;
+  --primary-foreground: #000000;
+  
+  --secondary: #0D1424;
+  --secondary-foreground: #9BA6C3;
+  
+  --accent: #7C5CFF;
+  --accent-foreground: #FFFFFF;
+  
+  --success: #14F195;
+  --success-foreground: #000000;
+  
+  --border: #1e293b;
+  --input: #131C31;
+  --ring: #00D4FF;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(19, 28, 49, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Aurora background effect */
+.aurora-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  background-color: #060B14;
+}
+
+.aurora-bg::before, .aurora-bg::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150vw;
+  height: 150vh;
+  background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, rgba(124,92,255,0.05) 40%, rgba(6,11,20,0) 70%);
+  transform: translate(-50%, -50%);
+  animation: rotate 30s linear infinite;
+  pointer-events: none;
+}
+
+.aurora-bg::after {
+  background: radial-gradient(circle, rgba(124,92,255,0.08) 0%, rgba(20,241,149,0.03) 40%, rgba(6,11,20,0) 70%);
+  animation: rotate 40s linear infinite reverse;
+}
+
+@keyframes rotate {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-foreground);
+}

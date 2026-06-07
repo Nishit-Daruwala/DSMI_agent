@@ -1,0 +1,13 @@
+runtime: python311
+env: standard
+
+entrypoint: gunicorn -w 4 -b 0.0.0.0:8080 "api.server:app"
+
+env_variables:
+  PYTHONUNBUFFERED: "1"
+  ENV: "production"
+
+handlers:
+- url: /.*
+  script: auto
+  secure: always
